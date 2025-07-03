@@ -1,12 +1,41 @@
+:root {
+  --primary-color: #49274a;
+  --secondary-color: #94618e;
+  --text: #49274a;
+  --secondary-background: #f4decb;
+  --card-background: #f8eee7;
+  --plus: green;
+  --minus: red;
+  --disabled-text: #5e5e5e;
+  --disabled-background: #d7cec7;
+  --disabled-border: #5e5e5e;
+}
+
 * {
   margin: 0;
   padding: 0;
 }
 
+input:focus {
+  outline: green;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 .app-container {
-  color: #4e0828;
-  font-family: 'Roboto', sans-serif;
+  color: var(--text);
+  font-family: 'Garamond', serif;
   min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
@@ -14,18 +43,37 @@
 .strapline,
 .counter-container {
   align-items: center;
-  border: #086788 5px solid;
-  border-radius: 30px;
-  display: flex;
+  border: var(--primary-color) 5px solid;
+  border-radius: 10px;
   justify-content: space-between;
   overflow: hidden;
   position: relative;
+}
+
+.strapline {
+  display: flex;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 .counter-container {
   flex-flow: column nowrap;
   height: auto;
   margin-top: 1%;
+}
+
+.card-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.reset-all-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 img.logo {
@@ -36,9 +84,9 @@ img.logo {
 
 .name {
   align-items: center;
-  color: #086788;
+  color: var(--secondary-color);
   display: flex;
-  font-size: 13vw;
+  font-size: min(calc(13vw + 1rem), 10rem);
   height: 100%;
   justify-content: center;
   max-height: 150px;
@@ -52,32 +100,36 @@ img.logo {
   overflow: visible;
   width: 90%;
   text-align: center;
-  font-size: calc(16px + 4vw);
+  font-size: min(calc(1rem + 4vw), 4rem);
   padding: 0 5px;
+}
+
+.reset {
+  font-size: 2rem;
+  padding: 0 20px 2%;
 }
 
 button {
   background-color: transparent;
   border: none;
-  color: #086788;
+  color: var(--primary-color);
   font-family: inherit;
-  font-size: 3rem;
+  font-size: 2rem;
   padding: 0 2%;
+  cursor: pointer;
 }
 
 .click-container {
   align-items: center;
-  background-color: #eaf9d9;
-  border: #23967f 2px solid;
-  border-radius: 30px;
+  background-color: var(--card-background);
+  border: var(--secondary-color) 5px solid;
+  border-radius: 10px;
   display: flex;
   flex-flow: column nowrap;
-  font-size: 5vw;
+  font-size: 2rem;
   height: auto;
-  margin: 0.5% 0;
-  min-height: 25vh;
-  justify-content: space-between;
-  padding: 1%;
+  margin: 2% auto;
+  padding: 2%;
   position: relative;
   width: 90vw;
 }
@@ -97,13 +149,12 @@ button {
 .number,
 .box {
   background-color: white;
-  border: #23967f 2px solid;
-  border-radius: 30px;
+  border: transparent 2px solid;
+  border-radius: 50px;
   color: inherit;
-
   display: flex;
   flex-direction: column;
-  font-size: 3rem;
+  font-size: 2rem;
   justify-content: center;
   margin: 0 1%;
   padding: 1%;
@@ -115,7 +166,7 @@ button {
   flex-grow: 2;
   font-size: 1rem;
   padding-right: 2%;
-  text-align: right;
+  text-align: center;
 }
 
 .submit,
@@ -137,11 +188,28 @@ button {
 }
 
 .plus {
-  color: #23967f;
+  color: var(--plus);
 }
 
 .minus {
-  color: #ff6f59;
+  color: var(--minus);
+}
+
+.disabled {
+  color: var(--disabled-text);
+  background-color: var(--disabled-background);
+  border-color: var(--disabled-border);
+  cursor: not-allowed;
+}
+
+.reset-all {
+  background-color: var(--secondary-color);
+  border-radius: 10px;
+  color: var(--secondary-background);
+  font-size: 2rem;
+  width: 99%;
+  padding: 1% 0;
+  margin: 1% 0;
 }
 
 @media screen and (min-width: 1020px) {
@@ -153,10 +221,15 @@ button {
     height: 18vh;
   }
 
-  .counter-container {
+  .card-container {
     flex-direction: row;
     min-height: 75vh;
     align-items: stretch;
+    min-height: 60vh;
+  }
+
+  button {
+    font-size: 3rem;
   }
 
   img.logo {
@@ -179,5 +252,10 @@ button {
 
   .box.reset {
     width: auto;
+  }
+
+  .reset,
+  .number {
+    font-size: min(calc(1rem + 4vw), 3rem);
   }
 }
