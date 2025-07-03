@@ -1,43 +1,66 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { counterUtils } from './utils';
+import { useCounter } from './counterContext';
 
 export default function Count(props) {
   const title = props.title;
-
   const [number, setNumber] = useState(0);
   const [inc, setInc] = useState(1);
+  const [hasSetIncrement, setHasSetIncrement] = useState(false);
 
-  let i = number;
-  let x;
+  const { registerCounter, unregisterCounter } = useCounter();
+
+  useEffect(() => {
+    const counterId = `counter-${title}`;
+
+    const resetFunction = () => {
+      const resetValues = counterUtils.reset();
+      setNumber(resetValues.number);
+      setInc(resetValues.increment);
+      setHasSetIncrement(false);
+      counterUtils.clearInput('increment');
+    };
+
+    registerCounter(counterId, resetFunction);
+
+    return () => {
+      unregisterCounter(counterId);
+    };
+  }, [title, registerCounter, unregisterCounter]);
 
   function add() {
-    i = number + inc;
-
-    setNumber(i);
+    const newNumber = counterUtils.add(number, inc);
+    setNumber(newNumber);
   }
 
   function minus() {
-    if (i > 0) {
-      i--;
-
-      setNumber(i);
-    } else {
-      return;
-    }
+    const newNumber = counterUtils.subtract(number);
+    setNumber(newNumber);
   }
 
   function clear() {
-    i = 0;
-    setNumber(i);
-    x = 1;
-    setInc(x);
-    document.getElementById('increment').value = '';
+    const resetValues = counterUtils.reset();
+    setNumber(resetValues.number);
+    setInc(resetValues.increment);
+    setHasSetIncrement(false);
+    counterUtils.clearInput('increment');
   }
 
   function setIncrement() {
-    x = document.getElementById('increment').value;
-    x = parseInt(x);
+    const inputValue = document.getElementById('increment').value;
+    if (isNaN(inputValue)) {
+      alert('Please enter a number');
+      return;
+    }
 
-    setInc(x);
+    if (inputValue < 0) {
+      alert('Please enter a positive number');
+      return;
+    }
+
+    const newIncrement = counterUtils.parseIncrement(inputValue);
+    setInc(newIncrement);
+    setHasSetIncrement(true);
   }
 
   return (
@@ -46,7 +69,7 @@ export default function Count(props) {
       {title === 'Stitches' && (
         <div className='settings'>
           <div className='st-text no-box'>
-            <p>count in</p>
+            <p>{hasSetIncrement ? 'now counting in' : 'count in'}</p>
             <p>multiples of:</p>
           </div>
           <input
@@ -57,7 +80,11 @@ export default function Count(props) {
             min='0'
             placeholder='1'
           />
-          <button className='box submit' onClick={setIncrement}>
+          <button
+            className={`box submit${hasSetIncrement ? ' disabled' : ''}`}
+            onClick={setIncrement}
+            disabled={hasSetIncrement}
+          >
             set
           </button>
         </div>
