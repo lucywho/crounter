@@ -5,5 +5,3 @@ User can count rows, stitches, and pattern repeats on a single screen. User can 
 ![Alt text](public/crounter.png?raw=true "Title")
 
 Built in React.js
-
-...
